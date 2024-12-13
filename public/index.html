@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Sender</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2rem;
+        }
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 1rem;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Send Data to DK-Mart</h1>
+    <form id="dataForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="price">Price:</label>
+        <input type="text" id="price" name="price" required>
+
+        <label for="sellerName">Seller Name:</label>
+        <input type="text" id="sellerName" name="sellerName" required>
+
+        <label for="productID">Product ID:</label>
+        <input type="text" id="productID" name="productID" required>
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" rows="4" required></textarea>
+
+        <button type="submit">Send Data</button>
+    </form>
+
+    <script>
+        document.getElementById('dataForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const data = {
+                name: document.getElementById('name').value,
+                price: document.getElementById('price').value,
+                sellerName: document.getElementById('sellerName').value,
+                productID: document.getElementById('productID').value,
+                description: document.getElementById('description').value,
+            };
+
+            try {
+                const response = await fetch('http://localhost:5000/sendData', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+                const result = await response.json();
+                alert(result.message || 'Data sent successfully!');
+            } catch (error) {
+                alert('Failed to send data.');
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>
